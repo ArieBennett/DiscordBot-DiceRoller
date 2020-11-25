@@ -1,31 +1,62 @@
-// Discord variables/constants
+const config = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-// Bot-specific variables/constants
-const prefix = "/r";
-var   botPassword = "your-token-goes-here";   // see if a commandline argument on launch can set this
+// usage instructions; list of commands and their format
+function botHelp() {
+    var str = "command | effect | usage";
+
+    str += "`r` | rolls gaming dice | `/r [a]d[b]+[c]`\n";
+    str += "alt. names: `roll`\n";
+    str += "`f` | flips coins | `/f [n]`\n";
+    str += "alt. names: `flip`\n";
+
+    return str;
+}
 
 // roll [num] [sides]-sided dice and add the constant [add]; returns total sum of dice AND constant
 function rollDice(num, sides, add) {
-    var roll = 0;
+    var sum = 0;
+    var str = "(";
 
-    for(var i = 0; i < num; i++) {
-        roll += Math.floor(1 + Math.random() * sides);
+    for (var i = 0; i < num; i++) {
+        var roll = Math.floor(1 + Math.random() * sides);
+        sum += roll;
+        str += roll;
+
+        if (i != (num-1))
+            str += " + ";
     }
+
+    sum += add;
+    str += ") + " + add + " = " + sum;
     
-    return (roll + add);
+    return str;
 }
 
-// flip [num] coins; eturns the number of heads.
+// flip [num] coins; returns the number of heads.
 function flipCoins(num) {
-    var count = 0;
+    var sum = 0;
+    var str = "(";
 
-    for(var i = 0; i < num; i++) {
-        count += Math.floor(Math.random() * 2);
+    for (var i = 0; i < num; i++) {
+        var flip = Math.floor(Math.random() * 2);
+        sum += flip;
+
+        if (flip == 1)
+            str += "H";
+        else
+            str += "T";
+
+        if (i != (num-1))
+            str += " + ";
     }
 
-    return count;
+    str += ") = " + sum + " head";
+    if (sum != 1)
+        str += "s";
+
+    return str;
 }
 
 client.once('ready', () => {
@@ -48,4 +79,4 @@ client.on('message', message => {
 
 });
 
-client.login(botPassword);
+client.login(config.token);
