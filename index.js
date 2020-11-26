@@ -75,17 +75,30 @@ client.once('ready', () => {
 
 client.on('message', message => {
     // ignore messages that don't start with prefix or are bots
-    if (!message.content.startsWith(prefix) || message.author.bot) {
+    if (!message.content.startsWith(config.prefix) || message.author.bot) {
         return;
     }
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
-    const response = "";
+    const invalidSyntax = "invalid usage! :rofl: See: `[prefix]help`";
 
-    // if the message contains "flip"
+    // if command is "h" OR "help"
+    if (command === "h" || command === "help") {
+        message.channel.send(botHelp());
+    }
 
-    // else if, check that it's a number followed by the character 'd'
+    // else if command is "f" OR "flip"
+    else if (command === "f" || command === "flip") {
+        if (args.length === 0)
+            message.channel.send(invalidSyntax);
+        else {
+            message.channel.send(flipCoins(args[0]));
+        }
+    }
+
+    // else if, command is "r" or "roll"
+
 
 });
 
