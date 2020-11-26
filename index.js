@@ -16,6 +16,12 @@ function botHelp() {
 
 // roll [num] [sides]-sided dice and add the constant [add]; returns total sum of dice AND constant
 function rollDice(num, sides, add) {
+    // handle incorrect inputs
+    if (num < 1 || !Number.isInteger(num))
+        return "cannot roll `" + num + "` dice.";
+    if (!(sides === 4 || sides === 6 || sides === 8 || sides === 10 || sides === 20 || sides === 100))
+        return "cannot roll `" + sides + "`-sided dice.";
+
     var sum = 0;
     var str = "(";
 
@@ -36,6 +42,10 @@ function rollDice(num, sides, add) {
 
 // flip [num] coins; returns the number of heads.
 function flipCoins(num) {
+    // handle incorrect inputs
+    if (num < 1 || !Number.isInteger(num))
+        return "cannot flip `" + num + "` coins.";
+
     var sum = 0;
     var str = "(";
 
@@ -69,7 +79,7 @@ client.on('message', message => {
         return;
     }
 
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
     const response = "";
 
