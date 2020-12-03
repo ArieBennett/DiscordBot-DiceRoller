@@ -2,6 +2,28 @@ const config = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+function extractArgs(str) {
+    var prunedStr = "";
+
+    for(var i = 0; i < str.length; i++) {
+    	// if not one of the accepted delimiters
+        if ( !(str[i] === 'd' || str[i] === '+' || str[i] === ' ') ) {
+        	// if negative, not a normal delimiter, put space first
+        	if (str[i] === '-')
+            	prunedStr += ' ';
+            
+            // add char to string
+            prunedStr += str[i];
+        }
+        // otherwise, check that the previous character (if exists) was a space
+        else if (str.length > 1 && !(str[i-1] === ' ' || str[i-1] === '-')) {
+            prunedStr += ' ';
+        }
+    }
+	
+    return prunedStr.split(/ +/);
+}
+
 // usage instructions; list of commands and their format
 function botHelp() {
     var str = "command | effect | usage";
@@ -79,9 +101,9 @@ client.on('message', message => {
         return;
     }
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const args = extractArgs(message.content.slice(prefix.length).trim());
     const command = args.shift().toLowerCase();
-    const invalidSyntax = "invalid usage! :rofl: See: `[prefix]help`";
+    const invalidSyntax = "invalid usage! :rofl: See: `" + config.prefix + "help`";
 
     // if command is "h" OR "help"
     if (command === "h" || command === "help") {
@@ -93,12 +115,21 @@ client.on('message', message => {
         if (args.length === 0)
             message.channel.send(invalidSyntax);
         else {
-            message.channel.send(flipCoins(args[0]));
+            message.channel.send(flipCoins(parseInt(args[0])));
         }
     }
 
     // else if, command is "r" or "roll"
-
+    else if (command === "r" || command === "roll") {
+        if (args.length < 2)
+            message.channel.send(invalidSyntax);
+        else {
+            if (args.length < 3)
+                message.channel.send(rollDice(parseInt(args[0]), parseInt(args[1]), 0));
+            else
+                message.channel.send(rollDice(parseInt(args[0]), parseInt(args[1]), parseInt(args[2])));
+        }
+    }
 
 });
 
