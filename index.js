@@ -26,12 +26,14 @@ function extractArgs(str) {
 
 // usage instructions; list of commands and their format
 function botHelp() {
-    var str = "command | effect | usage";
+    var str = "Help:\n";
 
-    str += "`r` | rolls gaming dice | `/r [a]d[b]+[c]`\n";
-    str += "alt. names: `roll`\n";
-    str += "`f` | flips coins | `/f [n]`\n";
-    str += "alt. names: `flip`\n";
+    str += "Command: `r` or `roll`\n" +
+           "Desc.: rolls gaming dice\n" +
+           "Format(s): `/r [a]d[b]+[c]` OR `/r [a] [b] [c]`\n";
+    str += "Command: `f` or `flip`\n" +
+           "Desc.: flips coins\n" +
+           "Format(s): `/f [a]`\n";
 
     return str;
 }
@@ -39,10 +41,10 @@ function botHelp() {
 // roll [num] [sides]-sided dice and add the constant [add]; returns total sum of dice AND constant
 function rollDice(num, sides, add) {
     // handle incorrect inputs
-    if (num < 1 || !Number.isInteger(num))
+    if (num < 1)
         return "cannot roll `" + num + "` dice.";
     if (!(sides === 4 || sides === 6 || sides === 8 || sides === 10 || sides === 20 || sides === 100))
-        return "cannot roll `" + sides + "`-sided dice.";
+        return "cannot roll `" + sides + "-sided` dice.";
 
     var sum = 0;
     var str = "(";
@@ -65,7 +67,7 @@ function rollDice(num, sides, add) {
 // flip [num] coins; returns the number of heads.
 function flipCoins(num) {
     // handle incorrect inputs
-    if (num < 1 || !Number.isInteger(num))
+    if (num < 1)
         return "cannot flip `" + num + "` coins.";
 
     var sum = 0;
