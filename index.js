@@ -103,7 +103,7 @@ client.on('message', message => {
         return;
     }
 
-    const args = extractArgs(message.content.slice(prefix.length).trim());
+    const args = extractArgs(message.content.slice(config.prefix.length).trim());
     const command = args.shift().toLowerCase();
     const invalidSyntax = "invalid usage! :rofl: See: `" + config.prefix + "help`";
 
